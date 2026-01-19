@@ -18,7 +18,7 @@ export function useLocations(query: string) {
     queryFn: async () => {
       if (!debouncedQuery || debouncedQuery.length < 2) return []
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/locations?keyword=${debouncedQuery}`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/locations?keyword=${debouncedQuery}`)
         if (!res.ok) return []
         return res.json() as Promise<Location[]>
       } catch (e) {

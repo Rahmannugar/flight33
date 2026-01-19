@@ -2,14 +2,11 @@
 
 import { Header } from "@/components/layout/Header"
 import { Navigation } from "@/components/layout/Navigation"
-import { CanvasRoot } from "@/components/canvas/CanvasRoot"
-import { HeroScene } from "@/components/canvas/HeroScene"
 import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
+import { motion, Variants } from "framer-motion"
 import Link from "next/link"
 import { ArrowRight, Globe, TrendingUp } from "lucide-react"
-
-import { Variants } from "framer-motion"
+import LiquidChrome from "@/components/ui/LiquidChrome"
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -30,9 +27,14 @@ const item: Variants = {
 export default function HomePage() {
   return (
     <>
-      <CanvasRoot>
-        <HeroScene />
-      </CanvasRoot>
+      <div className="fixed inset-0 z-0">
+         <LiquidChrome
+            baseColor={[0, 0.1, 0.2]}
+            speed={1}
+            amplitude={0.6}
+            interactive={true}
+          />
+      </div>
 
       <div className="relative z-10 flex min-h-screen flex-col">
         <Header />
@@ -45,9 +47,9 @@ export default function HomePage() {
             className="flex max-w-4xl flex-col items-center space-y-10"
           >
             <motion.div variants={item} className="rounded-full bg-white/5 px-4 py-1.5 backdrop-blur-md border border-white/10">
-              <span className="flex items-center gap-2 text-sm font-medium text-primary-foreground/90">
+              <span className="flex items-center gap-2 text-sm font-medium text-white">
                 <Globe className="h-4 w-4 text-blue-400" />
-                Explore the world freely
+                Explore the world
               </span>
             </motion.div>
 
@@ -85,7 +87,7 @@ export default function HomePage() {
                 </Link>
               </Button>
             </motion.div>
-            
+          
           </motion.div>
         </main>
         
@@ -94,4 +96,3 @@ export default function HomePage() {
     </>
   )
 }
-
