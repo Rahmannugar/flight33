@@ -1,8 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { useFlightStore } from "@/store/useFlightStore"
-import { useFlights } from "@/lib/hooks/useFlights" // New hook
+import { useFlightStore } from "@/store/flightStore"
+import { useFlights } from "@/lib/hooks/useFlights"
 import { LocationInput } from "./LocationInput"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -172,7 +172,7 @@ searchFlights(searchParams)
                 size="lg" 
                 type="submit" 
                 disabled={isPending}
-                className="h-14 w-full rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-lg font-semibold shadow-xl shadow-blue-500/20 hover:from-blue-500 hover:to-blue-400 transition-all active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed"
+                className="h-14 w-full cursor-pointer rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-lg font-semibold shadow-xl shadow-blue-500/20 hover:from-blue-500 hover:to-blue-400 transition-all active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed"
             >
                 {isPending ? (
                     <span className="flex items-center gap-2">

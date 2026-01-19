@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
-import { useFlightStore } from "@/store/useFlightStore" // We will move this later or keep usage if we just rename file
+import { useFlightStore } from "@/store/flightStore"
 import { FlightSearchParams } from "@/types"
 
 export function useFlights() {

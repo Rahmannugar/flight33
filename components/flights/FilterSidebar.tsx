@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useFlightStore } from "@/store/useFlightStore"
+import { useFlightStore } from "@/store/flightStore"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { RefreshCw, Filter } from "lucide-react"
@@ -19,7 +19,7 @@ export function FilterSidebar({ className }: { className?: string }) {
                 <Filter className="h-4 w-4 text-blue-400" />
                 Filters
             </h3>
-            <Button variant="ghost" size="sm" onClick={resetFilters} className="h-8 px-2 text-xs hover:bg-white/10 hover:text-white text-muted-foreground">
+            <Button variant="ghost" size="sm" onClick={resetFilters} className="h-8 cursor-pointer px-2 text-xs hover:bg-white/10 hover:text-white text-muted-foreground">
                 <RefreshCw className="mr-2 h-3 w-3" />
                 Reset
             </Button>
@@ -83,34 +83,7 @@ export function FilterSidebar({ className }: { className?: string }) {
         <div className="h-px bg-white/10" />
 
         {/* Airlines */}
-         <div className="space-y-4">
-            <span className="text-sm font-medium text-white block">Airlines</span>
-            <div className="space-y-3 max-h-[240px] overflow-y-auto pr-2 custom-scrollbar">
-                {uniqueAirlines.map(airline => (
-                    <label key={airline} className="flex items-center space-x-3 cursor-pointer group select-none">
-                         <div className="relative flex items-center">
-                            <input 
-                                type="checkbox"
-                                checked={filters.airlines.includes(airline)}
-                                onChange={(e) => {
-                                    const newAirlines = e.target.checked 
-                                      ? [...filters.airlines, airline]
-                                      : filters.airlines.filter(a => a !== airline)
-                                    setFilters({ airlines: newAirlines })
-                                }}
-                                className="peer appearance-none h-5 w-5 rounded border border-white/20 bg-white/5 checked:bg-blue-600 checked:border-blue-600 focus:ring-0 transition-all"
-                            />
-                            <svg className="absolute w-3.5 h-3.5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 peer-checked:opacity-100 text-white transition-opacity" viewBox="0 0 14 14" fill="none">
-                                <path d="M3 8L6 11L11 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                         </div>
-                        <span className="text-sm text-muted-foreground group-hover:text-white transition-colors truncate">
-                            {airline}
-                        </span>
-                    </label>
-                ))}
-            </div>
-        </div>
+
     </div>
   )
 }

@@ -1,42 +1,35 @@
 "use client"
 
 import { useMemo } from "react"
-import { useFlightStore } from "@/store/useFlightStore"
+import { useFlightStore } from "@/store/flightStore"
+import { usePriceTrends } from "@/lib/hooks/usePriceTrends" // Need to ensure this export matches
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { cn } from "@/lib/utils"
-import { TrendingUp } from "lucide-react"
+import { TrendingUp, Loader2 } from "lucide-react"
 
 export function PriceGraph({ className }: { className?: string }) {
-  const { filteredFlights } = useFlightStore()
+  const { searchId } = useFlightStore()
+  const { data: trendData, isLoading } = usePriceTrends(searchId || undefined)
 
-  const data = useMemo(() => {
-    if (!filteredFlights.length) return []
+  const chartData = useMemo(() => {
+    if (!trendData || !trendData.length) return []
+    // Assuming backend returns buckets or similar, if backend returns { min, max, ... } or buckets
+    // The previous frontend mock logic did buckets. 
+    // Backend `price-trends` route (which I should check content of) likely returns something particular.
+    // Checking `price-trends.route.ts`... it returns buckets!
     
-    // Group by hour
-    const buckets = new Array(24).fill(0).map((_, i) => ({
-       hour: i,
-       minPrice: null as number | null,
-       count: 0
-    }))
-
-    filteredFlights.forEach(f => {
-        const d = new Date(f.segments[0].departureTime)
-        const h = d.getHours()
-        if (buckets[h].minPrice === null || f.price < buckets[h].minPrice!) {
-            buckets[h].minPrice = f.price
-        }
-        buckets[h].count++
-    })
-
-    return buckets.map(b => ({
+    // Backend Buckets Example: { hour: 0, minPrice: 200, count: 5 }
+    // We map it to chart friendly format
+     return trendData.map((b: any) => ({
         hour: `${b.hour.toString().padStart(2, '0')}:00`,
         price: b.minPrice || 0,
         hasData: b.count > 0
-    })).filter(b => b.hasData) 
+    })).filter((b: any) => b.hasData) 
+  }, [trendData])
 
-  }, [filteredFlights])
-
-  if (!filteredFlights.length) return null
+  if (!searchId) return null
+  if (isLoading) return <div className={cn("h-[350px] w-full flex items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-md", className)}><Loader2 className="animate-spin text-blue-400" /></div>
+  if (!chartData.length) return null
 
   return (
     <div className={cn("h-[350px] w-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-md shadow-lg", className)}>
@@ -48,7 +41,7 @@ export function PriceGraph({ className }: { className?: string }) {
        
        <div className="h-[250px] w-full">
          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                <defs>
                   <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
@@ -76,7 +69,7 @@ export function PriceGraph({ className }: { className?: string }) {
                   contentStyle={{ backgroundColor: '#09090b', border: '1px solid #ffffff20', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}
                   itemStyle={{ color: '#fff' }}
                   labelStyle={{ color: '#a1a1aa', marginBottom: '4px' }}
-                  formatter={(value: number) => [`$${value}`, 'Min Price']}
+                  formatter={(value: any) => [`$${value}`, 'Min Price']}
                   cursor={{ stroke: '#ffffff20', strokeWidth: 2 }}
                />
                <Area 

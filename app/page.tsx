@@ -9,7 +9,9 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { ArrowRight, Globe, TrendingUp } from "lucide-react"
 
-const container = {
+import { Variants } from "framer-motion"
+
+const container: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -20,7 +22,7 @@ const container = {
   },
 }
 
-const item = {
+const item: Variants = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 50, damping: 20 } },
 }
@@ -35,12 +37,12 @@ export default function HomePage() {
       <div className="relative z-10 flex min-h-screen flex-col">
         <Header />
 
-        <main className="flex flex-1 flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8">
+        <main className="flex flex-1 flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8 pb-32">
           <motion.div
             variants={container}
             initial="hidden"
             animate="show"
-            className="flex max-w-4xl flex-col items-center space-y-8"
+            className="flex max-w-4xl flex-col items-center space-y-10"
           >
             <motion.div variants={item} className="rounded-full bg-white/5 px-4 py-1.5 backdrop-blur-md border border-white/10">
               <span className="flex items-center gap-2 text-sm font-medium text-primary-foreground/90">
@@ -65,7 +67,7 @@ export default function HomePage() {
             </motion.p>
 
             <motion.div variants={item} className="flex flex-col gap-4 sm:flex-row sm:gap-6">
-              <Button asChild size="lg" className="h-12 rounded-full px-8 text-base">
+              <Button asChild size="lg" className="h-12 rounded-full cursor-pointer px-8 text-base">
                 <Link href="/flights">
                   Start Searching
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -75,7 +77,7 @@ export default function HomePage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="h-12 rounded-full border-white/10 bg-white/5 px-8 text-base backdrop-blur-sm hover:bg-white/10"
+                className="h-12 rounded-full cursor-pointer border-white/10 bg-white/5 px-8 text-base backdrop-blur-sm hover:bg-white/10"
               >
                 <Link href="#features">
                   <TrendingUp className="mr-2 h-4 w-4 text-blue-400" />
@@ -83,8 +85,6 @@ export default function HomePage() {
                 </Link>
               </Button>
             </motion.div>
-            
-            {/* Stats or Trust Indicators could go here */}
             
           </motion.div>
         </main>
