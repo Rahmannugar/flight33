@@ -63,11 +63,11 @@ export function LocationInput({ label, value, onChange, placeholder, className, 
 
   return (
     <div className={cn("relative w-full group", className)}>
-      <label className="mb-1.5 block text-xs font-medium text-muted-foreground uppercase tracking-wider ml-1">
+      <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">
         {label}
       </label>
       <div className="relative">
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors group-hover:text-blue-400 group-focus-within:text-blue-400">
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 transition-colors group-hover:text-white/80 group-focus-within:text-white">
           <Icon className="h-4 w-4" />
         </div>
         <Input 
@@ -83,7 +83,7 @@ export function LocationInput({ label, value, onChange, placeholder, className, 
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="pl-10 pr-10 h-14 bg-white/5 border-white/10 backdrop-blur-md focus-visible:ring-blue-500/50 transition-all hover:bg-white/10 hover:border-white/20 text-base font-semibold placeholder:font-normal placeholder:text-muted-foreground/40"
+            className="pl-11 pr-10 h-14 bg-white/5 border-white/5 backdrop-blur-md rounded-xl text-white focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:bg-white/10 focus-visible:border-white/30 transition-all duration-300 hover:bg-white/10 hover:border-white/20 text-sm font-medium placeholder:font-normal placeholder:text-white/30"
             autoComplete="off"
         />
         
@@ -91,21 +91,21 @@ export function LocationInput({ label, value, onChange, placeholder, className, 
             <button 
                 type="button"
                 onClick={clearInput} 
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full text-muted-foreground/50 hover:text-white hover:bg-white/20 transition-all"
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-full text-white/30 hover:text-white hover:bg-white/20 transition-all"
             >
                 <X className="h-3 w-3" />
             </button>
         )}
         
         {isLoading && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent p-1">
-                <Loader2 className="h-4 w-4 animate-spin text-blue-400" />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent p-1">
+                <Loader2 className="h-4 w-4 animate-spin text-white/60" />
             </div>
         )}
       </div>
 
       {isOpen && locations && locations.length > 0 && (focused || isOpen) && (
-        <div className="absolute z-50 mt-2 w-full min-w-[300px] rounded-xl border border-white/10 bg-[#0A0A0A]/95 p-1.5 text-popover-foreground shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100 max-h-[320px] overflow-y-auto custom-scrollbar ring-1 ring-white/5">
+        <div className="absolute z-50 mt-2 w-full min-w-[300px] rounded-xl border border-white/10 bg-[#0A0A0A] p-2 text-popover-foreground shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200 ring-1 ring-white/5 max-h-[320px] overflow-y-auto custom-scrollbar">
            {locations.map((loc, i) => (
              <button
                 key={`${loc.iataCode}-${loc.name}`}
@@ -119,15 +119,15 @@ export function LocationInput({ label, value, onChange, placeholder, className, 
                     handleSelect(loc)
                 }}
              >
-                <div className="mt-0.5 rounded-full bg-white/5 p-2 text-muted-foreground group-hover/item:text-blue-400 group-hover/item:bg-blue-400/10 transition-colors">
-                    <PlaneTakeoff className="h-4 w-4" />
+                <div className="mt-0.5 rounded-full bg-white/5 p-2 text-white/50 group-hover/item:text-white group-hover/item:bg-white/10 transition-colors">
+                    <PlaneTakeoff className="h-3 w-3" />
                 </div>
                 <div className="flex-1 overflow-hidden">
                     <div className="flex items-center justify-between">
-                        <span className="font-semibold text-white truncate text-base">{loc.address.cityName}</span>
-                        <span className="ml-2 bg-blue-500/10 px-2 py-0.5 rounded text-xs font-bold text-blue-400 font-mono tracking-wide">{loc.iataCode}</span>
+                        <span className="font-medium text-white truncate text-sm">{loc.address.cityName}</span>
+                        <span className="ml-2 bg-white/10 px-1.5 py-0.5 rounded text-[10px] font-bold text-white/80 font-mono tracking-wide">{loc.iataCode}</span>
                     </div>
-                    <span className="text-xs text-muted-foreground truncate block mt-0.5 group-hover/item:text-white/70">{loc.name}, {loc.address.countryName}</span>
+                    <span className="text-xs text-white/40 truncate block mt-0.5 group-hover/item:text-white/60">{loc.name}, {loc.address.countryName}</span>
                 </div>
              </button>
            ))}

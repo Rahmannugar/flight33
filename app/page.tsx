@@ -30,8 +30,8 @@ export default function HomePage() {
       <div className="fixed inset-0 z-0">
          <LiquidChrome
             baseColor={[0, 0.1, 0.2]}
-            speed={1}
-            amplitude={0.6}
+            speed={0.4}
+            amplitude={0.3}
             interactive={true}
           />
       </div>

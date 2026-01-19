@@ -18,10 +18,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { cn } from "@/lib/utils"
-
-
-import LiquidChrome from "@/components/ui/LiquidChrome"
+import Dither from "@/components/ui/Dither"
 
 export default function FlightsPage() {
   const { filteredFlights, isLoading, error, flights, currentPage, itemsPerPage, setCurrentPage } = useFlightStore()
@@ -36,12 +33,16 @@ export default function FlightsPage() {
   return (
     <div className="min-h-screen bg-background pb-20 sm:pb-0 relative">
        <div className="fixed inset-0 z-0">
-          <LiquidChrome
-            baseColor={[0, 0.1, 0.2]}
-            speed={1}
-            amplitude={0.6}
-            interactive={true}
-          />
+    <Dither
+    waveColor={[0,0.5,0.5]}
+    disableAnimation={false}
+    enableMouseInteraction
+    mouseRadius={0.3}
+    colorNum={40}
+    waveAmplitude={0.3}
+    waveFrequency={3}
+    waveSpeed={0.05}
+  />
        </div>
        <Header />
        <main className="container mx-auto px-4 py-8 max-w-7xl animate-in fade-in duration-500 relative z-10">

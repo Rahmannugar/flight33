@@ -45,13 +45,13 @@ searchFlights(searchParams)
             type="button" 
             onClick={open}
             className={cn(
-                "flex h-14 w-full items-center justify-between rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm ring-offset-background transition-all hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50",
-                !value && "text-muted-foreground/50",
+                "flex h-14 w-full items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-2 text-sm ring-offset-background transition-all duration-300 hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20 focus:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50",
+                !value && "text-white/40",
                 value && "text-white font-medium"
             )}
         >
-            <span className="flex items-center gap-2 truncate">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
+            <span className="flex items-center gap-3 truncate">
+                <Calendar className="h-4 w-4 text-white/50" />
                 {value || placeholder}
             </span>
         </button>
@@ -60,35 +60,37 @@ searchFlights(searchParams)
 
   return (
     <motion.form 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         onSubmit={handleSearch} 
-        className={cn("flex flex-col gap-6 rounded-2xl border border-white/10 bg-[#0A0A0A]/80 p-6 backdrop-blur-xl shadow-2xl", className)}
+        className={cn("flex flex-col gap-8 rounded-3xl border border-white/10 bg-black/20 p-8 backdrop-blur-2xl shadow-2xl relative overflow-hidden", className)}
     >
-       
+       {/* Glass Shine Effect */}
+       <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
+
        {/* Top Row: Locations */}
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-50">
           <LocationInput 
              label="Origin"
              value={searchParams.origin} 
              onChange={(v) => setSearchParams({ origin: v })} 
-             placeholder="Where from?"
+             placeholder="City or Airport"
              icon="departure"
           />
           <LocationInput 
              label="Destination"
              value={searchParams.destination} 
              onChange={(v) => setSearchParams({ destination: v })} 
-             placeholder="Where to?"
+             placeholder="City or Airport"
              icon="arrival"
           />
        </div>
 
        {/* Middle Row: Dates & Passengers */}
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
             <div className="lg:col-span-1">
-                <label className="mb-1.5 block text-xs font-medium text-muted-foreground uppercase tracking-wider ml-1">Departure</label>
+                <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Departure</label>
                 <div className="relative z-20">
                     <ByteDatePicker
                         value={searchParams.departureDate ? new Date(searchParams.departureDate) : null}
@@ -105,7 +107,7 @@ searchFlights(searchParams)
             </div>
 
             <div className="lg:col-span-1">
-                <label className="mb-1.5 block text-xs font-medium text-muted-foreground uppercase tracking-wider ml-1">Return (Optional)</label>
+                <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Return</label>
                 <div className="relative z-20">
                      <ByteDatePicker
                         value={searchParams.returnDate ? new Date(searchParams.returnDate) : null}
@@ -122,21 +124,21 @@ searchFlights(searchParams)
             </div>
 
             {/* Travelers & Class */}
-            <div className="lg:col-span-2 grid grid-cols-2 gap-4">
+            <div className="lg:col-span-2 grid grid-cols-2 gap-6">
                 <div>
-                     <label className="mb-1.5 block text-xs font-medium text-muted-foreground uppercase tracking-wider ml-1">Travelers</label>
-                     <div className="h-14 flex items-center rounded-xl border border-white/10 bg-white/5 px-3 hover:bg-white/10 transition-colors">
-                        <Users className="mr-2 h-4 w-4 text-muted-foreground" />
+                     <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Travelers</label>
+                     <div className="h-14 flex items-center rounded-xl border border-white/5 bg-white/5 px-4 transition-all duration-300 hover:bg-white/10 hover:border-white/20 focus-within:bg-white/10 focus-within:ring-1 focus-within:ring-white/20">
+                        <Users className="mr-3 h-4 w-4 text-white/50" />
                         <Select 
                             value={String(searchParams.adults)} 
                             onValueChange={(v) => setSearchParams({ adults: Number(v) })}
                         >
-                            <SelectTrigger className="h-full border-0 bg-transparent p-0 focus:ring-0 text-sm font-medium">
+                            <SelectTrigger className="h-full border-0 bg-transparent p-0 focus:ring-0 text-sm font-medium text-white">
                                 <SelectValue />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-[#0A0A0A] border-white/10 text-white">
                                 {[1,2,3,4,5,6,7,8,9].map(n => (
-                                    <SelectItem key={n} value={String(n)}>{n} Adult{n > 1 ? 's' : ''}</SelectItem>
+                                    <SelectItem key={n} value={String(n)} className="focus:bg-white/10 focus:text-white cursor-pointer">{n} Adult{n > 1 ? 's' : ''}</SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
@@ -144,21 +146,21 @@ searchFlights(searchParams)
                 </div>
 
                 <div>
-                     <label className="mb-1.5 block text-xs font-medium text-muted-foreground uppercase tracking-wider ml-1">Class</label>
-                     <div className="h-14 flex items-center rounded-xl border border-white/10 bg-white/5 px-3 hover:bg-white/10 transition-colors">
-                        <Briefcase className="mr-2 h-4 w-4 text-muted-foreground" />
+                     <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Class</label>
+                     <div className="h-14 flex items-center rounded-xl border border-white/5 bg-white/5 px-4 transition-all duration-300 hover:bg-white/10 hover:border-white/20 focus-within:bg-white/10 focus-within:ring-1 focus-within:ring-white/20">
+                        <Briefcase className="mr-3 h-4 w-4 text-white/50" />
                         <Select 
                             value={searchParams.travelClass} 
                             onValueChange={(v: any) => setSearchParams({ travelClass: v })}
                         >
-                            <SelectTrigger className="h-full border-0 bg-transparent p-0 focus:ring-0 text-sm font-medium w-full">
+                            <SelectTrigger className="h-full border-0 bg-transparent p-0 focus:ring-0 text-sm font-medium w-full text-white">
                                 <SelectValue />
                             </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="ECONOMY">Economy</SelectItem>
-                                <SelectItem value="PREMIUM_ECONOMY">Prem. Eco</SelectItem>
-                                <SelectItem value="BUSINESS">Business</SelectItem>
-                                <SelectItem value="FIRST">First</SelectItem>
+                            <SelectContent className="bg-[#0A0A0A] border-white/10 text-white">
+                                <SelectItem value="ECONOMY" className="focus:bg-white/10 focus:text-white cursor-pointer">Economy</SelectItem>
+                                <SelectItem value="PREMIUM_ECONOMY" className="focus:bg-white/10 focus:text-white cursor-pointer">Prem. Eco</SelectItem>
+                                <SelectItem value="BUSINESS" className="focus:bg-white/10 focus:text-white cursor-pointer">Business</SelectItem>
+                                <SelectItem value="FIRST" className="focus:bg-white/10 focus:text-white cursor-pointer">First</SelectItem>
                             </SelectContent>
                         </Select>
                      </div>
@@ -167,22 +169,22 @@ searchFlights(searchParams)
        </div>
 
        {/* Submit */}
-       <div className="pt-2">
+       <div className="pt-2 relative z-10">
             <Button 
                 size="lg" 
                 type="submit" 
                 disabled={isPending}
-                className="h-14 w-full cursor-pointer rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-lg font-semibold shadow-xl shadow-blue-500/20 hover:from-blue-500 hover:to-blue-400 transition-all active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed"
+                className="h-14 w-full cursor-pointer rounded-xl bg-white text-black text-lg font-bold tracking-tight shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:bg-white/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-[1.01] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
             >
                 {isPending ? (
                     <span className="flex items-center gap-2">
-                         <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+                         <div className="h-5 w-5 animate-spin rounded-full border-2 border-black/20 border-t-black" />
                          Searching...
                     </span>
                 ) : (
                     <>
                         <Search className="mr-2 h-5 w-5" />
-                        Find Best Flights
+                        Find Flights
                     </>
                 )}
             </Button>
