@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Providers } from "./Providers"
 import { Space_Grotesk } from "next/font/google"
+import { LayoutClient } from "./LayoutClient"
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -33,15 +34,18 @@ export const metadata: Metadata = {
   },
 }
 
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${spaceGrotesk.className} antialiased`}>
-        <Providers>{children}</Providers>
+       <Providers>
+          <LayoutClient>{children}</LayoutClient>
+        </Providers>
       </body>
     </html>
   )
