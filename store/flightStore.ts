@@ -31,6 +31,7 @@ interface FlightState {
   
   setFilters: (filters: Partial<FilterState>) => void
   resetFilters: () => void
+  resetSearch: () => void
   uniqueAirlines: string[]
   priceRange: [number, number]
 }
@@ -70,7 +71,10 @@ export const flightStore = create(
       priceRange: [0, 0],
 
       setSearchParams: (params) => 
-        set((state) => ({ searchParams: { ...state.searchParams, ...params } })),
+        set((state) => ({ 
+          searchParams: { ...state.searchParams, ...params },
+          error: null 
+        })),
 
       setSearchResults: (data) => {
         const prices = data.flights.map(f => f.price)
@@ -126,6 +130,23 @@ export const flightStore = create(
             filters: { maxPrice: priceRange[1], stops: [], airlines: [] },
             filteredFlights: flights,
             currentPage: 1
+        })
+      },
+
+      resetSearch: () => {
+        set({
+          flights: [],
+          filteredFlights: [],
+          error: null,
+          searchId: null,
+          uniqueAirlines: [],
+          priceRange: [0, 0],
+          currentPage: 1,
+          filters: {
+            maxPrice: null,
+            stops: [],
+            airlines: []
+          }
         })
       }
     }),

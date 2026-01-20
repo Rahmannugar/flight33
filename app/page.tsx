@@ -24,7 +24,16 @@ const item: Variants = {
   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 50, damping: 20 } },
 }
 
+import { flightStore } from "@/store/flightStore"
+import { useEffect } from "react"
+
 export default function HomePage() {
+  const resetSearch = flightStore((state) => state.resetSearch)
+
+  useEffect(() => {
+    resetSearch()
+  }, [resetSearch])
+
   return (
     <>
       <div className="fixed inset-0 z-0">

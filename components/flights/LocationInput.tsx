@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { useLocations } from "@/lib/hooks/useLocations"
 import { Input } from "@/components/ui/input"
 import { MapPin, Loader2, PlaneTakeoff, PlaneLanding, X } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -22,13 +21,13 @@ interface LocationInputProps {
   placeholder?: string
   className?: string
   icon?: "departure" | "arrival"
+  locations?: Location[]
+  isLoading?: boolean
 }
 
-export function LocationInput({ label, value, onChange, placeholder, className, icon }: LocationInputProps) {
+export function LocationInput({ label, value, onChange, placeholder, className, icon, locations, isLoading }: LocationInputProps) {
   const [isOpen, setIsOpen] = React.useState(false)
   const [focused, setFocused] = React.useState(false)
-
-  const { data: locations, isLoading } = useLocations(value)
 
   const handleSelect = (loc: Location) => {
     onChange(loc.iataCode) 
@@ -78,7 +77,7 @@ export function LocationInput({ label, value, onChange, placeholder, className, 
             }}
             onFocus={() => {
                 setFocused(true)
-                if (value.length >= 2) setIsOpen(true)
+                setIsOpen(true)
             }}
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
@@ -104,33 +103,41 @@ export function LocationInput({ label, value, onChange, placeholder, className, 
         )}
       </div>
 
-      {isOpen && locations && locations.length > 0 && (focused || isOpen) && (
+      {isOpen && (focused || isOpen) && (
         <div className="absolute z-50 mt-2 w-full min-w-[300px] rounded-xl border border-white/10 bg-[#0A0A0A] p-2 text-popover-foreground shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200 ring-1 ring-white/5 max-h-[320px] overflow-y-auto custom-scrollbar">
-           {locations.map((loc, i) => (
-             <button
-                key={`${loc.iataCode}-${loc.name}`}
-                type="button"
-                className={cn(
-                    "flex w-full items-start gap-4 rounded-lg px-4 py-3 text-sm hover:bg-white/10 text-left transition-colors group/item",
-                    i === 0 && "bg-white/5" 
-                )}
-                onMouseDown={(e) => {
-                    e.preventDefault() // Prevents focus loss
-                    handleSelect(loc)
-                }}
-             >
-                <div className="mt-0.5 rounded-full bg-white/5 p-2 text-white/50 group-hover/item:text-white group-hover/item:bg-white/10 transition-colors">
-                    <PlaneTakeoff className="h-3 w-3" />
-                </div>
-                <div className="flex-1 overflow-hidden">
-                    <div className="flex items-center justify-between">
-                        <span className="font-medium text-white truncate text-sm">{loc.address.cityName}</span>
-                        <span className="ml-2 bg-white/10 px-1.5 py-0.5 rounded text-[10px] font-bold text-white/80 font-mono tracking-wide">{loc.iataCode}</span>
+           {isLoading ? (
+               <div className="p-4 text-center text-sm text-white/40">Searching locations...</div>
+           ) : value.length < 2 ? (
+               <div className="p-4 text-center text-sm text-white/40">Type at least 2 characters...</div>
+           ) : (!locations || locations.length === 0) ? (
+               <div className="p-4 text-center text-sm text-white/40">No locations found.</div>
+           ) : (
+               locations.map((loc, i) => (
+                 <button
+                    key={`${loc.iataCode}-${loc.name}`}
+                    type="button"
+                    className={cn(
+                        "flex w-full items-start gap-4 rounded-lg px-4 py-3 text-sm hover:bg-white/10 text-left transition-colors group/item",
+                        i === 0 && "bg-white/5" 
+                    )}
+                    onMouseDown={(e) => {
+                        e.preventDefault() // Prevents focus loss
+                        handleSelect(loc)
+                    }}
+                 >
+                    <div className="mt-0.5 rounded-full bg-white/5 p-2 text-white/50 group-hover/item:text-white group-hover/item:bg-white/10 transition-colors">
+                        <PlaneTakeoff className="h-3 w-3" />
                     </div>
-                    <span className="text-xs text-white/40 truncate block mt-0.5 group-hover/item:text-white/60">{loc.name}, {loc.address.countryName}</span>
-                </div>
-             </button>
-           ))}
+                    <div className="flex-1 overflow-hidden">
+                        <div className="flex items-center justify-between">
+                            <span className="font-medium text-white truncate text-sm">{loc.address.cityName}</span>
+                            <span className="ml-2 bg-white/10 px-1.5 py-0.5 rounded text-[10px] font-bold text-white/80 font-mono tracking-wide">{loc.iataCode}</span>
+                        </div>
+                        <span className="text-xs text-white/40 truncate block mt-0.5 group-hover/item:text-white/60">{loc.name}, {loc.address.countryName}</span>
+                    </div>
+                 </button>
+               ))
+           )}
         </div>
       )}
     </div>

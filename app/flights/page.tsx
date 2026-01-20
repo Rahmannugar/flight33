@@ -58,7 +58,13 @@ export default function FlightsPage() {
                </div>
            )}
 
-           {!isLoading && (flights.length > 0 || error) && (
+            {error && (
+                <div className="mx-auto mt-8 w-full max-w-2xl rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-center text-red-500 backdrop-blur-sm">
+                    {error}
+                </div>
+            )}
+
+           {!isLoading && flights.length > 0 && (
                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                    <div className="lg:col-span-1 hidden lg:block h-full">
                        <FilterSidebar className="sticky top-24" />
@@ -73,11 +79,6 @@ export default function FlightsPage() {
                        )}
                        
                        {/* Error */}
-                       {error && (
-                           <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-red-500 text-center">
-                               {error}
-                           </div>
-                       )}
 
                        {/* Results */}
                        {!isLoading && filteredFlights.length > 0 && (

@@ -3,6 +3,7 @@
 import * as React from "react"
 import { flightStore } from "@/store/flightStore"
 import { useFlights } from "@/lib/hooks/useFlights"
+import { useLocations } from "@/lib/hooks/useLocations"
 import { LocationInput } from "./LocationInput"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -16,16 +17,37 @@ import "byte-datepicker/styles.css"
 export function FlightSearchForm({ className }: { className?: string }) {
   const { searchParams, setSearchParams } = flightStore()
   const { mutate: searchFlights, isPending } = useFlights()
+  
+  const { data: originLocations, isLoading: originLoading } = useLocations(searchParams.origin)
+  const { data: destLocations, isLoading: destLoading } = useLocations(searchParams.destination)
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!searchParams.origin || !searchParams.destination || !searchParams.departureDate) {
+    let finalOrigin = searchParams.origin
+    let finalDest = searchParams.destination
+
+    // Silent Auto-select if not IATA code (assuming IATA is 3 chars)
+    // We check if we have suggestions. If so, and current value isn't 3 chars (likely city name), we take the first suggestion.
+    if (finalOrigin && finalOrigin.length !== 3 && originLocations && originLocations.length > 0) {
+        finalOrigin = originLocations[0].iataCode
+        setSearchParams({ origin: finalOrigin })
+    }
+    if (finalDest && finalDest.length !== 3 && destLocations && destLocations.length > 0) {
+        finalDest = destLocations[0].iataCode
+        setSearchParams({ destination: finalDest })
+    }
+
+    if (!finalOrigin || !finalDest || !searchParams.departureDate) {
         toast.error("Please fill in all required fields")
         return
     }
 
-searchFlights(searchParams)
+    searchFlights({
+        ...searchParams,
+        origin: finalOrigin,
+        destination: finalDest
+    })
   }
 
   const handleDateChange = (date: Date | null, field: 'departureDate' | 'returnDate') => {
@@ -77,6 +99,8 @@ searchFlights(searchParams)
              onChange={(v) => setSearchParams({ origin: v })} 
              placeholder="City or Airport"
              icon="departure"
+             locations={originLocations}
+             isLoading={originLoading}
           />
           <LocationInput 
              label="Destination"
@@ -84,6 +108,8 @@ searchFlights(searchParams)
              onChange={(v) => setSearchParams({ destination: v })} 
              placeholder="City or Airport"
              icon="arrival"
+             locations={destLocations}
+             isLoading={destLoading}
           />
        </div>
 

@@ -17,13 +17,14 @@ export function useLocations(query: string) {
     queryKey: ['locations', debouncedQuery],
     queryFn: async () => {
       if (!debouncedQuery || debouncedQuery.length < 2) return []
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/locations?keyword=${debouncedQuery}`)
-        if (!res.ok) return []
-        return res.json() as Promise<Location[]>
-      } catch (e) {
-        return []
+      
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/locations?keyword=${debouncedQuery}`)
+      
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
       }
+      
+      return res.json() as Promise<Location[]>
     },
     enabled: debouncedQuery.length >= 2,
     staleTime: 1000 * 60 * 60, // 1 hour
