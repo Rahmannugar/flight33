@@ -11,7 +11,7 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("http://flyt33.vercel.app"),
+  metadataBase: new URL("https://flyt33.vercel.app"),
   title: {
     default: "Flight33",
     template: "%s · Flight33",
