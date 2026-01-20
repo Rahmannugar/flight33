@@ -1,7 +1,6 @@
 "use client"
 
-import * as React from "react"
-import { flightStore } from "@/store/flightStore"
+import { flightStore } from "@/lib/store/flightStore"
 import { useFlights } from "@/lib/hooks/useFlights"
 import { useLocations } from "@/lib/hooks/useLocations"
 import { LocationInput } from "./LocationInput"
@@ -26,9 +25,6 @@ export function FlightSearchForm({ className }: { className?: string }) {
     
     let finalOrigin = searchParams.origin
     let finalDest = searchParams.destination
-
-    // Silent Auto-select if not IATA code (assuming IATA is 3 chars)
-    // We check if we have suggestions. If so, and current value isn't 3 chars (likely city name), we take the first suggestion.
     if (finalOrigin && finalOrigin.length !== 3 && originLocations && originLocations.length > 0) {
         finalOrigin = originLocations[0].iataCode
         setSearchParams({ origin: finalOrigin })

@@ -1,9 +1,9 @@
 "use client"
 
-import * as React from "react"
 import { Input } from "@/components/ui/input"
 import { MapPin, Loader2, PlaneTakeoff, PlaneLanding, X } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useState } from "react"
 
 interface Location {
   name: string
@@ -26,8 +26,8 @@ interface LocationInputProps {
 }
 
 export function LocationInput({ label, value, onChange, placeholder, className, icon, locations, isLoading }: LocationInputProps) {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [focused, setFocused] = React.useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const [focused, setFocused] = useState(false)
 
   const handleSelect = (loc: Location) => {
     onChange(loc.iataCode) 

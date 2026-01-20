@@ -1,7 +1,6 @@
 "use client"
 
-import * as React from "react"
-import { flightStore } from "@/store/flightStore"
+import { flightStore } from "@/lib/store/flightStore"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { RefreshCw, Filter } from "lucide-react"

@@ -7,6 +7,8 @@ import { motion, Variants } from "framer-motion"
 import Link from "next/link"
 import { ArrowRight, Globe, TrendingUp } from "lucide-react"
 import LiquidChrome from "@/components/ui/LiquidChrome"
+import { flightStore } from "@/lib/store/flightStore"
+import { useEffect } from "react"
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -23,9 +25,6 @@ const item: Variants = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 50, damping: 20 } },
 }
-
-import { flightStore } from "@/store/flightStore"
-import { useEffect } from "react"
 
 export default function HomePage() {
   const resetSearch = flightStore((state) => state.resetSearch)

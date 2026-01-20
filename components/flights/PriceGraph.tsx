@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
-import { flightStore } from "@/store/flightStore"
+import { flightStore } from "@/lib/store/flightStore"
 import { usePriceTrends } from "@/lib/hooks/usePriceTrends" 
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { cn } from "@/lib/utils"

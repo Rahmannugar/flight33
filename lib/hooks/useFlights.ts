@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
-import { flightStore } from "@/store/flightStore"
+import { flightStore } from "@/lib/store/flightStore"
 import { FlightSearchParams } from "@/types"
 
 export function useFlights() {
