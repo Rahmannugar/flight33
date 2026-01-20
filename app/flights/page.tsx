@@ -24,7 +24,6 @@ import Dither from "@/components/ui/Dither"
 export default function FlightsPage() {
   const { filteredFlights, isLoading, error, flights, currentPage, itemsPerPage, setCurrentPage } = flightStore()
 
-   // Pagination Logic
    const totalItems = filteredFlights.length
    const totalPages = Math.ceil(totalItems / itemsPerPage)
    const startIndex = (currentPage - 1) * itemsPerPage
@@ -72,38 +71,39 @@ export default function FlightsPage() {
                    </div>
                    
                    <div className="lg:col-span-3 space-y-6">
-                       {/* Price Graph */}
                        {flights.length > 0 && (
                            <div className="mb-8 animate-in slide-in-from-bottom-5 duration-500 delay-100">
                                <PriceGraph />
                            </div>
                        )}
                        
-                       {/* Error */}
+                       {flights.length > 0 && (
+                           <div className="lg:hidden flex items-center justify-between mb-6">
+                               <h2 className="text-lg font-semibold text-white">
+                                   {filteredFlights.length} Flights Found
+                               </h2>
+                               <Sheet>
+                                   <SheetTrigger asChild>
+                                       <Button variant="outline" size="sm" className="border-white/10 bg-white/5 hover:bg-white/10">
+                                           <Filter className="mr-2 h-4 w-4" /> Filters
+                                       </Button>
+                                   </SheetTrigger>
+                                   <SheetContent side="left" className="w-full sm:max-w-[350px] border-r border-white/10 bg-[#000000] p-0 pt-12 overflow-y-auto">
+                                       <div className="px-6"> 
+                                           <FilterSidebar />
+                                       </div>
+                                   </SheetContent>
+                               </Sheet>
+                           </div>
+                       )}
 
-                       {/* Results */}
                        {!isLoading && filteredFlights.length > 0 && (
                            <div className="flex-1">
-                               <div className="mb-6 flex items-center justify-between">
+                               <div className="mb-6 hidden lg:flex items-center justify-between">
                                    <h2 className="text-lg font-semibold text-white">
                                        {filteredFlights.length} Flights Found
                                        {filteredFlights.length > 0 && <span className="text-sm font-normal text-muted-foreground ml-2">(Showing {startIndex + 1}-{Math.min(endIndex, totalItems)})</span>}
                                    </h2>
-                                    {/* Mobile Filter Toggle */}
-                                    <div className="lg:hidden">
-                                        <Sheet>
-                                            <SheetTrigger asChild>
-                                                <Button variant="outline" size="sm" className="border-white/10 bg-white/5 hover:bg-white/10">
-                                                    <Filter className="mr-2 h-4 w-4" /> Filters
-                                                </Button>
-                                            </SheetTrigger>
-                                            <SheetContent side="left" className="w-full sm:max-w-[350px] border-r border-white/10 bg-[#000000] p-0 pt-12 overflow-y-auto">
-                                                <div className="px-6"> 
-                                                    <FilterSidebar />
-                                                </div>
-                                            </SheetContent>
-                                        </Sheet>
-                                   </div>
                                </div>
 
                                <div className="space-y-4">
@@ -112,7 +112,6 @@ export default function FlightsPage() {
                                    ))}
                                </div>
 
-                               {/* Pagination Controls */}
                                {totalPages > 1 && (
                                    <div className="mt-8">
                                        <Pagination>

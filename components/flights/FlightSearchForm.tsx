@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import { flightStore } from "@/lib/store/flightStore"
 import { useFlights } from "@/lib/hooks/useFlights"
@@ -15,12 +15,18 @@ import ByteDatePicker from "byte-datepicker"
 import "byte-datepicker/styles.css"
 
 export function FlightSearchForm({ className }: { className?: string }) {
-  const { searchParams, setSearchParams } = flightStore()
+  const { searchParams, setSearchParams, clearSearchParams } = flightStore()
   const { mutate: searchFlights, isPending } = useFlights()
   const [tripType, setTripType] = useState<"one-way" | "round-trip">("round-trip")
   
   const { data: originLocations, isLoading: originLoading } = useLocations(searchParams.origin)
   const { data: destLocations, isLoading: destLoading } = useLocations(searchParams.destination)
+
+  useEffect(() => {
+    return () => {
+      clearSearchParams()
+    }
+  }, [clearSearchParams])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,11 +47,19 @@ export function FlightSearchForm({ className }: { className?: string }) {
         return
     }
 
-    searchFlights({
-        ...searchParams,
-        origin: finalOrigin,
-        destination: finalDest
-    })
+    searchFlights(
+        {
+            ...searchParams,
+            origin: finalOrigin,
+            destination: finalDest
+        },
+        {
+            onSuccess: () => {
+                clearSearchParams()
+                setTripType("round-trip")
+            }
+        }
+    )
   }
 
   const handleDateChange = (date: Date | null, field: 'departureDate' | 'returnDate') => {

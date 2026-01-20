@@ -25,6 +25,7 @@ interface FlightState {
   setSelectedFlight: (id: string | null) => void
   
   setSearchParams: (params: Partial<FlightSearchParams>) => void
+  clearSearchParams: () => void
   setSearchResults: (results: FlightSearchResult) => void
   setLoading: (loading: boolean) => void
   setError: (error: string | null) => void
@@ -75,6 +76,8 @@ export const flightStore = create(
           searchParams: { ...state.searchParams, ...params },
           error: null 
         })),
+
+      clearSearchParams: () => set({ searchParams: defaultParams }),
 
       setSearchResults: (data) => {
         const prices = data.flights.map(f => f.price)
@@ -153,7 +156,7 @@ export const flightStore = create(
     {
       name: 'flight-storage',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ selectedFlightId: state.selectedFlightId, searchParams: state.searchParams }),
+      partialize: (state) => ({ selectedFlightId: state.selectedFlightId }),
     }
   ) as StateCreator<FlightState>
 )
