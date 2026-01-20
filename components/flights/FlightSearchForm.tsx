@@ -1,4 +1,5 @@
 "use client"
+import { useState } from "react"
 
 import { flightStore } from "@/lib/store/flightStore"
 import { useFlights } from "@/lib/hooks/useFlights"
@@ -6,7 +7,7 @@ import { useLocations } from "@/lib/hooks/useLocations"
 import { LocationInput } from "./LocationInput"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Users, Briefcase, Calendar } from "lucide-react"
+import { Search, Users, Briefcase, Calendar, ArrowRightLeft } from "lucide-react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
@@ -16,6 +17,7 @@ import "byte-datepicker/styles.css"
 export function FlightSearchForm({ className }: { className?: string }) {
   const { searchParams, setSearchParams } = flightStore()
   const { mutate: searchFlights, isPending } = useFlights()
+  const [tripType, setTripType] = useState<"one-way" | "round-trip">("round-trip")
   
   const { data: originLocations, isLoading: originLoading } = useLocations(searchParams.origin)
   const { data: destLocations, isLoading: destLoading } = useLocations(searchParams.destination)
@@ -109,8 +111,33 @@ export function FlightSearchForm({ className }: { className?: string }) {
           />
        </div>
 
-       {/* Middle Row: Dates & Passengers */}
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+          
+      {/* Middle Row: Dates & Passengers */}
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 relative z-10">
+            <div className="lg:col-span-1">
+                <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Trip Type</label>
+                 <div className="h-14 flex items-center rounded-xl border border-white/5 bg-white/5 px-4 transition-all duration-300 hover:bg-white/10 hover:border-white/20 focus-within:bg-white/10 focus-within:ring-1 focus-within:ring-white/20">
+                    <ArrowRightLeft className="mr-3 h-4 w-4 text-white/50" />
+                    <Select 
+                        value={tripType} 
+                        onValueChange={(v: "one-way" | "round-trip") => {
+                            setTripType(v)
+                            if (v === "one-way") {
+                                setSearchParams({ returnDate: undefined })
+                            }
+                        }}
+                    >
+                        <SelectTrigger className="h-full border-0 bg-transparent p-0 focus:ring-0 text-sm font-medium text-white">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#0A0A0A] border-white/10 text-white">
+                            <SelectItem value="round-trip" className="focus:bg-white/10 focus:text-white cursor-pointer">Round Trip</SelectItem>
+                            <SelectItem value="one-way" className="focus:bg-white/10 focus:text-white cursor-pointer">One Way</SelectItem>
+                        </SelectContent>
+                    </Select>
+                 </div>
+            </div>
+
             <div className="lg:col-span-1">
                 <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Departure Date</label>
                 <div className="relative z-20">
@@ -130,23 +157,24 @@ export function FlightSearchForm({ className }: { className?: string }) {
 
             <div className="lg:col-span-1">
                 <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Return Date</label>
-                <div className="relative z-20">
+                <div className={cn("relative z-20", tripType === 'one-way' && "opacity-50 pointer-events-none")}>
                      <ByteDatePicker
                         value={searchParams.returnDate ? new Date(searchParams.returnDate) : null}
                         onChange={(d: any) => handleDateChange(d as Date | null, 'returnDate')}
-                        placeholder="Return Date"
+                        placeholder={tripType === 'one-way' ? "No return" : "Return Date"}
                         formatString="yyyy-mm-dd"
                         includeDays
                         minDate={searchParams.departureDate ? new Date(searchParams.departureDate) : new Date()}
                         hideInput
+                        disabled={tripType === 'one-way'}
                     >
-                         {(props: any) => <CustomDateInput {...props} value={searchParams.returnDate || ""} placeholder="One way" />}
+                         {(props: any) => <CustomDateInput {...props} value={searchParams.returnDate || ""} placeholder={tripType === 'one-way' ? "No return" : "Return Date"} />}
                     </ByteDatePicker>
                 </div>
             </div>
 
             {/* Travelers & Class */}
-            <div className="lg:col-span-2 grid grid-cols-2 gap-6">
+            <div className="md:col-span-2 lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                      <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Travelers</label>
                      <div className="h-14 flex items-center rounded-xl border border-white/5 bg-white/5 px-4 transition-all duration-300 hover:bg-white/10 hover:border-white/20 focus-within:bg-white/10 focus-within:ring-1 focus-within:ring-white/20">
