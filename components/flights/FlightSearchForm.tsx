@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useFlightStore } from "@/store/flightStore"
+import { flightStore } from "@/store/flightStore"
 import { useFlights } from "@/lib/hooks/useFlights"
 import { LocationInput } from "./LocationInput"
 import { Button } from "@/components/ui/button"
@@ -14,7 +14,7 @@ import ByteDatePicker from "byte-datepicker"
 import "byte-datepicker/styles.css"
 
 export function FlightSearchForm({ className }: { className?: string }) {
-  const { searchParams, setSearchParams } = useFlightStore()
+  const { searchParams, setSearchParams } = flightStore()
   const { mutate: searchFlights, isPending } = useFlights()
 
   const handleSearch = (e: React.FormEvent) => {

@@ -6,7 +6,7 @@ import { FlightSearchForm } from "@/components/flights/FlightSearchForm"
 import { FlightCard } from "@/components/flights/FlightCard"
 import { FilterSidebar } from "@/components/flights/FilterSidebar"
 import { PriceGraph } from "@/components/flights/PriceGraph"
-import { useFlightStore } from "@/store/flightStore"
+import { flightStore } from "@/store/flightStore"
 import { Loader2, Filter } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -21,7 +21,7 @@ import {
 import Dither from "@/components/ui/Dither"
 
 export default function FlightsPage() {
-  const { filteredFlights, isLoading, error, flights, currentPage, itemsPerPage, setCurrentPage } = useFlightStore()
+  const { filteredFlights, isLoading, error, flights, currentPage, itemsPerPage, setCurrentPage } = flightStore()
 
    // Pagination Logic
    const totalItems = filteredFlights.length

@@ -1,25 +1,18 @@
 "use client"
 
 import { useMemo } from "react"
-import { useFlightStore } from "@/store/flightStore"
-import { usePriceTrends } from "@/lib/hooks/usePriceTrends" // Need to ensure this export matches
+import { flightStore } from "@/store/flightStore"
+import { usePriceTrends } from "@/lib/hooks/usePriceTrends" 
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { cn } from "@/lib/utils"
 import { TrendingUp, Loader2 } from "lucide-react"
 
 export function PriceGraph({ className }: { className?: string }) {
-  const { searchId } = useFlightStore()
+  const { searchId } = flightStore()
   const { data: trendData, isLoading } = usePriceTrends(searchId || undefined)
 
   const chartData = useMemo(() => {
     if (!trendData || !trendData.length) return []
-    // Assuming backend returns buckets or similar, if backend returns { min, max, ... } or buckets
-    // The previous frontend mock logic did buckets. 
-    // Backend `price-trends` route (which I should check content of) likely returns something particular.
-    // Checking `price-trends.route.ts`... it returns buckets!
-    
-    // Backend Buckets Example: { hour: 0, minPrice: 200, count: 5 }
-    // We map it to chart friendly format
      return trendData.map((b: any) => ({
         hour: `${b.hour.toString().padStart(2, '0')}:00`,
         price: b.minPrice || 0,

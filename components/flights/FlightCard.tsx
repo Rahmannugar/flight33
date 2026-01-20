@@ -4,11 +4,11 @@ import { Flight } from "@/types"
 import { Button } from "@/components/ui/button"
 import { Plane, Check, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useFlightStore } from "@/store/flightStore"
+import { flightStore } from "@/store/flightStore"
 import { motion } from "framer-motion"
 
 export function FlightCard({ flight, index }: { flight: Flight; index: number }) {
-  const { selectedFlightId, setSelectedFlight } = useFlightStore()
+  const { selectedFlightId, setSelectedFlight } = flightStore()
   const firstSegment = flight.segments[0]
   const lastSegment = flight.segments[flight.segments.length - 1]
   

@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query"
-import { useFlightStore } from "@/store/flightStore"
+import { flightStore } from "@/store/flightStore"
 import { FlightSearchParams } from "@/types"
 
 export function useFlights() {
-  const { setSearchResults, setError, setLoading } = useFlightStore()
+  const { setSearchResults, setError, setLoading } = flightStore()
 
   return useMutation({
     mutationFn: async (params: FlightSearchParams) => {

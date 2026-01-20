@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create, StateCreator } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { Flight, FlightSearchParams, FlightSearchResult } from '@/types'
 
@@ -43,8 +43,8 @@ const defaultParams: FlightSearchParams = {
   travelClass: 'ECONOMY'
 }
 
-export const useFlightStore = create<FlightState>()(
-  persist(
+export const flightStore = create(
+  persist<FlightState, [], [], Partial<FlightState>>(
     (set, get) => ({
       searchParams: defaultParams,
       flights: [],
@@ -134,5 +134,5 @@ export const useFlightStore = create<FlightState>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ selectedFlightId: state.selectedFlightId, searchParams: state.searchParams }),
     }
-  )
+  ) as StateCreator<FlightState>
 )

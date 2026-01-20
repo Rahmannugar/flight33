@@ -1,15 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { useFlightStore } from "@/store/flightStore"
+import { flightStore } from "@/store/flightStore"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { RefreshCw, Filter } from "lucide-react"
 
 export function FilterSidebar({ className }: { className?: string }) {
-  const { filters, priceRange, uniqueAirlines, setFilters, resetFilters } = useFlightStore()
+  const { filters, priceRange, setFilters, resetFilters } = flightStore()
   
-  // Don't show if max price is 0 (initial state)
   if (priceRange[1] === 0) return null
 
   return (
