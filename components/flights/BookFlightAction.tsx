@@ -9,7 +9,7 @@ import { BookingModal } from "./BookingModal"
 import { Flight } from "@/types"
 
 export function BookFlightAction() {
-  const { selectedFlightId, searchParams, flights } = flightStore()
+  const { selectedFlightId, searchParams, flights, error } = flightStore()
   const [showModal, setShowModal] = useState(false)
   const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null)
 
@@ -59,7 +59,7 @@ export function BookFlightAction() {
       <BookingModal isOpen={showModal} />
       
       <AnimatePresence>
-        {selectedFlightId && (
+        {selectedFlightId && !error && flights.length > 0 && (
           <motion.div
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
