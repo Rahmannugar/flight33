@@ -7,6 +7,7 @@ import { FlightCard } from "@/components/flights/FlightCard"
 import { FilterSidebar } from "@/components/flights/FilterSidebar"
 import { PriceGraph } from "@/components/flights/PriceGraph"
 import { flightStore } from "@/lib/store/flightStore"
+import { BookFlightAction } from "@/components/flights/BookFlightAction"
 import { Loader2, Filter } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -45,7 +46,7 @@ export default function FlightsPage() {
   />
        </div>
        <Header />
-       <main className="container mx-auto px-4 py-8 max-w-7xl animate-in fade-in duration-500 relative z-10">
+       <main className="container mx-auto px-4 py-8 pb-32 max-w-7xl animate-in fade-in duration-500 relative z-10">
            <div className="mb-8">
                <h1 className="text-3xl font-bold text-white mb-6">Find your perfect flight</h1>
                <FlightSearchForm />
@@ -159,6 +160,7 @@ export default function FlightsPage() {
                </div>
            )}
        </main>
+       <BookFlightAction />
        <Navigation />
     </div>
   )
