@@ -1,14 +1,34 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
+import { flightStore } from "@/lib/store/flightStore"
 
-export function usePriceTrends(searchId: string | undefined) {
-  return useQuery({
-    queryKey: ['price-trends', searchId],
-    queryFn: async () => {
-      if (!searchId) return null
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/flights/price-trends?searchId=${searchId}`)
-      if (!res.ok) throw new Error('Failed to fetch price trends')
-      return res.json()
-    },
-    enabled: !!searchId
-  })
+export function usePriceTrends() {
+  const { filteredFlights } = flightStore()
+  
+  const chartData = useMemo(() => {
+    if (!filteredFlights || !filteredFlights.length) return []
+
+    // Initialize 24 hourly buckets
+    const hourlyGroups: number[][] = Array.from({ length: 24 }, () => [])
+
+    filteredFlights.forEach(flight => {
+        const firstSegment = flight.segments[0]
+        const date = new Date(firstSegment.departureTime)
+        const hour = date.getHours()
+        if (hour >= 0 && hour < 24) {
+            hourlyGroups[hour].push(flight.price)
+        }
+    })
+
+    return hourlyGroups.map((prices, hour) => {
+        if (!prices.length) return null
+        const minPrice = Math.min(...prices)
+        return {
+            hour: `${hour.toString().padStart(2, '0')}:00`,
+            price: minPrice,
+            count: prices.length
+        }
+    }).filter(Boolean)
+  }, [filteredFlights])
+
+  return { chartData }
 }

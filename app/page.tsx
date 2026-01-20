@@ -44,10 +44,10 @@ export default function HomePage() {
           />
       </div>
 
-      <div className="relative z-10 flex min-h-screen flex-col">
+      <div className="relative z-10 flex h-dvh flex-col overflow-hidden">
         <Header />
 
-        <main className="flex flex-1 flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8 pb-32">
+        <main className="flex flex-1 flex-col items-center justify-center px-4 pb-20 text-center sm:px-6 md:pb-0 lg:px-8">
           <motion.div
             variants={container}
             initial="hidden"
@@ -89,7 +89,7 @@ export default function HomePage() {
                 size="lg"
                 className="h-12 rounded-full cursor-pointer border-white/10 bg-white/5 px-8 text-base backdrop-blur-sm hover:bg-white/10"
               >
-                <Link href="#features">
+                <Link href="#">
                   <TrendingUp className="mr-2 h-4 w-4 text-blue-400" />
                   View Trends
                 </Link>

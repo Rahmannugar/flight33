@@ -1,28 +1,16 @@
 "use client"
 
-import { useMemo } from "react"
 import { flightStore } from "@/lib/store/flightStore"
 import { usePriceTrends } from "@/lib/hooks/usePriceTrends" 
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { cn } from "@/lib/utils"
-import { TrendingUp, Loader2 } from "lucide-react"
+import { TrendingUp } from "lucide-react"
 
 export function PriceGraph({ className }: { className?: string }) {
   const { searchId } = flightStore()
-  const { data: trendData, isLoading } = usePriceTrends(searchId || undefined)
+  const { chartData } = usePriceTrends()
 
-  const chartData = useMemo(() => {
-    if (!trendData || !trendData.length) return []
-     return trendData.map((b: any) => ({
-        hour: `${b.hour.toString().padStart(2, '0')}:00`,
-        price: b.minPrice || 0,
-        hasData: b.count > 0
-    })).filter((b: any) => b.hasData) 
-  }, [trendData])
-
-  if (!searchId) return null
-  if (isLoading) return <div className={cn("h-[350px] w-full flex items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-md", className)}><Loader2 className="animate-spin text-blue-400" /></div>
-  if (!chartData.length) return null
+  if (!searchId || !chartData.length) return null
 
   return (
     <div className={cn("h-[350px] w-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-md shadow-lg", className)}>

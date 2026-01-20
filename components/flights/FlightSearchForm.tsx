@@ -112,7 +112,7 @@ export function FlightSearchForm({ className }: { className?: string }) {
        {/* Middle Row: Dates & Passengers */}
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
             <div className="lg:col-span-1">
-                <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Departure</label>
+                <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Departure Date</label>
                 <div className="relative z-20">
                     <ByteDatePicker
                         value={searchParams.departureDate ? new Date(searchParams.departureDate) : null}
@@ -129,7 +129,7 @@ export function FlightSearchForm({ className }: { className?: string }) {
             </div>
 
             <div className="lg:col-span-1">
-                <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Return</label>
+                <label className="mb-2 block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Return Date</label>
                 <div className="relative z-20">
                      <ByteDatePicker
                         value={searchParams.returnDate ? new Date(searchParams.returnDate) : null}
